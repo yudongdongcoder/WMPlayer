@@ -10,6 +10,6 @@ s.source       = { :git => 'https://github.com/zhengwenming/WMPlayer.git',:tag =
 s.source_files  = 'WMPlayer/**/*.{h,m}'
 s.resources     = 'WMPlayer/WMPlayer.bundle'
 s.framework     = 'Foundation','UIKit','MediaPlayer','AVFoundation'
-s.dependency    'Masonry'
+# s.dependency    'Masonry'
 s.requires_arc  = true
 end

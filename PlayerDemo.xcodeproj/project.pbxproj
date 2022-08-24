@@ -290,7 +290,7 @@
 				TargetAttributes = {
 					C4EC7F3B1DF4FCD2006E9820 = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = 7D992WX2BB;
+						DevelopmentTeam = 3AAM6WRD89;
 					};
 				};
 			};
@@ -515,7 +515,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
-				DEVELOPMENT_TEAM = 7D992WX2BB;
+				DEVELOPMENT_TEAM = 3AAM6WRD89;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/WMPlayer/WNPlayer/FFmpeg/include";
 				INFOPLIST_FILE = PlayerDemo/Info.plist;
@@ -539,7 +539,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
-				DEVELOPMENT_TEAM = 7D992WX2BB;
+				DEVELOPMENT_TEAM = 3AAM6WRD89;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/WMPlayer/WNPlayer/FFmpeg/include";
 				INFOPLIST_FILE = PlayerDemo/Info.plist;

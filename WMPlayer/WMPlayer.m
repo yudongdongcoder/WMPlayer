@@ -249,8 +249,8 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     self.pipBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     self.pipBtn.showsTouchWhenHighlighted = YES;
     [self.pipBtn addTarget:self action:@selector(pipAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.pipBtn setImage:WMPlayerImage(@"pip.jpg") forState:UIControlStateNormal];
-    [self.pipBtn setImage:WMPlayerImage(@"pip.jpg") forState:UIControlStateSelected];
+    [self.pipBtn setImage:WMPlayerImage(@"pip") forState:UIControlStateNormal];
+    [self.pipBtn setImage:WMPlayerImage(@"pip") forState:UIControlStateSelected];
     self.pipBtn.hidden = NO;
     [self.contentView addSubview:self.pipBtn];
     
@@ -302,7 +302,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
              [self.topView addSubview:airplay];
           self.airPlayView = airplay;
       }
-    
+    self.airPlayView
     self.enableAirPlay = NO;
     
     
