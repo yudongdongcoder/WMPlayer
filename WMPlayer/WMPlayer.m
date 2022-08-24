@@ -72,7 +72,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 //显示播放时间的UILabel+加载失败的UILabel+播放视频的title
 @property (nonatomic,strong) UILabel   *leftTimeLabel,*rightTimeLabel,*titleLabel,*loadFailedLabel;
 //控制全屏和播放暂停按钮
-@property (nonatomic,strong) UIButton  *fullScreenBtn,*playOrPauseBtn,*lockBtn,*pipBtn,*backBtn,*rateBtn;
+@property (nonatomic,strong) UIButton  *fullScreenBtn,*playOrPauseBtn,*lockBtn,*pipBtn,*backBtn,*rateBtn,*episodeBtn, *gravityBtn;
 //进度滑块&声音滑块
 @property (nonatomic,strong) UISlider   *progressSlider,*volumeSlider;
 //显示缓冲进度和底部的播放进度
@@ -167,7 +167,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     self.enableFastForwardGesture = YES;
     
     //小菊花
-    self.loadingView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    self.loadingView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
     [self.contentView addSubview:self.loadingView];
     [self.loadingView startAnimating];
     
@@ -287,6 +287,24 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     [self.bottomView addSubview:self.rateBtn];
     self.rateBtn.hidden = YES;
     self.rate = 1.0;//默认值
+    
+    self.episodeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.episodeBtn addTarget:self action:@selector(episodeClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.episodeBtn setTitle:@"选集" forState:UIControlStateNormal];
+//    [self.episodeBtn setTitle:@"选集" forState:UIControlStateSelected];
+    self.episodeBtn.titleLabel.font = [UIFont systemFontOfSize:15.f];
+    self.episodeBtn.titleLabel.textAlignment = NSTextAlignmentRight;
+    [self.bottomView addSubview:self.episodeBtn];
+    
+    self.gravityBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.gravityBtn addTarget:self action:@selector(gravityClick:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.gravityBtn setTitle:@"适合" forState:UIControlStateNormal];
+//    [self.gravityBtn setTitle:@"适合" forState:UIControlStateSelected];
+    self.gravityBtn.titleLabel.font = [UIFont systemFontOfSize:15.f];
+    self.gravityBtn.titleLabel.textAlignment = NSTextAlignmentRight;
+    [self.bottomView addSubview:self.gravityBtn];
+    self.playerLayerGravity = WMPlayerLayerGravityResizeAspect;
+
       if (@available(iOS 11.0, *)) {
         AVRoutePickerView  *airPlayView = [[AVRoutePickerView alloc]initWithFrame:CGRectMake(0, 0, 35, 35)];
           //活跃状态颜色
@@ -383,6 +401,22 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     }
     self.rate = rate;
 }
+
+-(void)episodeClick:(UIButton *)btn{
+
+    if (self.delegate&&[self.delegate respondsToSelector:@selector(wmplayer:clickedLockButton:)]) {
+        [self.delegate wmplayer:self clickedEpisodeButton:btn];
+    }
+}
+
+-(void)gravityClick:(UIButton *)btn{
+    NSInteger value = self.playerLayerGravity;
+    value += 1;
+    if (value > 2) {
+        value = 0;
+    }
+    self.playerLayerGravity = value;
+}
 #pragma mark
 #pragma mark - layoutSubviews
 -(void)layoutSubviews{
@@ -395,6 +429,9 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     self.loadingView.center = self.contentView.center;
     self.topView.frame = CGRectMake(0, 0, self.contentView.frame.size.width, 70);
     self.backBtn.frame = CGRectMake(self.isFullscreen?([WMPlayer IsiPhoneX]?60:30):10, self.topView.frame.size.height/2-(self.backBtn.currentImage.size.height+4)/2, self.backBtn.currentImage.size.width+6, self.backBtn.currentImage.size.height+4);
+    
+    self.airPlayView.frame = CGRectMake(self.topView.frame.size.width - self.safeAreaInsets.left - 35 - 10, self.backBtn.frame.origin.y, 35, 35);
+    
     self.titleLabel.frame = CGRectMake(CGRectGetMaxX(self.backBtn.frame)+5, 0, self.topView.frame.size.width-CGRectGetMaxX(self.backBtn.frame)-20-50, self.topView.frame.size.height);
     if (self.isFullscreen) {
         self.bottomView.frame = CGRectMake(self.topView.frame.origin.x, self.contentView.frame.size.height-105, self.topView.frame.size.width, 105);
@@ -403,7 +440,9 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
         self.playOrPauseBtn.frame = CGRectMake(iphoneX_margin, CGRectGetMaxY(self.progressSlider.frame)+15, self.playOrPauseBtn.currentImage.size.width, self.playOrPauseBtn.currentImage.size.height);
         self.leftTimeLabel.frame = CGRectMake(CGRectGetMaxX(self.playOrPauseBtn.frame)+10, CGRectGetMaxY(self.playOrPauseBtn.frame)-self.playOrPauseBtn.frame.size.height/2-20/2, 100, 20);
         self.rightTimeLabel.frame = CGRectMake(CGRectGetMaxX(self.leftTimeLabel.frame)+1, self.leftTimeLabel.frame.origin.y, self.leftTimeLabel.frame.size.width, self.leftTimeLabel.frame.size.height);
-        self.rateBtn.frame = CGRectMake(self.bottomView.frame.size.width-iphoneX_margin-45, self.playOrPauseBtn.frame.origin.y, 45, 30);
+        self.episodeBtn.frame = CGRectMake(self.bottomView.frame.size.width-iphoneX_margin-45, self.playOrPauseBtn.frame.origin.y, 45, 30);
+        self.gravityBtn.frame = CGRectMake(self.episodeBtn.frame.origin.x - 65, self.playOrPauseBtn.frame.origin.y, 45, 30);
+        self.rateBtn.frame = CGRectMake(self.gravityBtn.frame.origin.x - 65, self.playOrPauseBtn.frame.origin.y, 45, 30);
     }else{
         self.bottomView.frame = CGRectMake(self.topView.frame.origin.x, self.contentView.frame.size.height-70, self.topView.frame.size.width, 70);
         self.playOrPauseBtn.frame = CGRectMake(10, self.bottomView.frame.size.height/2-self.playOrPauseBtn.currentImage.size.height/2, self.playOrPauseBtn.currentImage.size.width, self.playOrPauseBtn.currentImage.size.height);
@@ -414,7 +453,9 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
         self.rateBtn.frame = CGRectMake(self.bottomView.frame.size.width-self.playOrPauseBtn.frame.origin.x, self.playOrPauseBtn.frame.origin.y, 45, 30);
     }
     self.lockBtn.frame = CGRectMake(iphoneX_margin, self.contentView.frame.size.height/2-self.lockBtn.frame.size.height/2, self.lockBtn.currentImage.size.width, self.lockBtn.currentImage.size.height);
-    self.pipBtn.frame = CGRectMake(self.contentView.frame.size.width-40, self.contentView.frame.size.height/2-self.lockBtn.frame.size.height/2, self.lockBtn.currentImage.size.width, self.lockBtn.currentImage.size.height);
+    CGFloat pipWidth = self.lockBtn.currentImage.size.width;
+//    NSLog(@"%f __++ %f", self.airPlayView.center.x, self.airPlayView.frame.origin.x)
+    self.pipBtn.frame = CGRectMake(self.airPlayView.center.x -  pipWidth / 2, self.contentView.frame.size.height/2-self.lockBtn.frame.size.height/2, self.lockBtn.currentImage.size.width, self.lockBtn.currentImage.size.height);
     self.fullScreenBtn.frame = CGRectMake(self.bottomView.frame.size.width-10-self.fullScreenBtn.currentImage.size.width, self.playOrPauseBtn.frame.origin.y, self.fullScreenBtn.currentImage.size.width, self.fullScreenBtn.currentImage.size.height);
     
     
@@ -709,14 +750,17 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
         case WMPlayerLayerGravityResize:
             self.playerLayer.videoGravity = AVLayerVideoGravityResize;
             self.videoGravity = AVLayerVideoGravityResize;
+            [self.gravityBtn setTitle:@"拉伸" forState: UIControlStateNormal];
             break;
         case WMPlayerLayerGravityResizeAspect:
             self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
             self.videoGravity = AVLayerVideoGravityResizeAspect;
+            [self.gravityBtn setTitle:@"默认" forState: UIControlStateNormal];
             break;
         case WMPlayerLayerGravityResizeAspectFill:
             self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
             self.videoGravity = AVLayerVideoGravityResizeAspectFill;
+            [self.gravityBtn setTitle:@"填满" forState: UIControlStateNormal];
             break;
         default:
             break;
@@ -888,6 +932,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
         self.topView.alpha = 1.0;
         self.lockBtn.alpha = 1.0;
         self.bottomProgress.alpha = 0.f;
+        self.pipBtn.alpha = 1.0;
         self.isHiddenTopAndBottomView = NO;
         if (self.delegate&&[self.delegate respondsToSelector:@selector(wmplayer:isHiddenTopAndBottomView:)]) {
             [self.delegate wmplayer:self isHiddenTopAndBottomView:self.isHiddenTopAndBottomView];
@@ -909,7 +954,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     [UIView animateWithDuration:0.5 animations:^{
         self.bottomView.alpha = 0.0;
         self.topView.alpha = 0.0;
-      
+        self.pipBtn.alpha = 0.0;
         if (self.isLockScreen) {
             self.bottomProgress.alpha = 1.0;
             //5s hiddenLockBtn
