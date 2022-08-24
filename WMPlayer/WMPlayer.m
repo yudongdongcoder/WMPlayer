@@ -302,7 +302,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
              [self.topView addSubview:airplay];
           self.airPlayView = airplay;
       }
-    self.airPlayView
+//    self.airPlayView
     self.enableAirPlay = NO;
     
     
