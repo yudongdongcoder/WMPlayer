@@ -71,10 +71,10 @@ typedef NS_ENUM(NSUInteger,WMControlType) {
 -(void)wmplayer:(WMPlayer *)wmplayer clickedPlayOrPauseButton:(UIButton *)playOrPauseBtn;
 //点击锁定🔒按钮的方法
 -(void)wmplayer:(WMPlayer *)wmplayer clickedLockButton:(UIButton *)lockBtn;
-//点击填充按钮的方法
--(void)wmplayer:(WMPlayer *)wmplayer clickedGravityButton:(UIButton *)lockBtn;
+////点击填充按钮的方法
+//-(void)wmplayer:(WMPlayer *)wmplayer clickedGravityButton:(UIButton *)lockBtn;
 //点击选集按钮的方法
--(void)wmplayer:(WMPlayer *)wmplayer clickedEpisodeButton:(UIButton *)lockBtn;
+-(void)wmplayer:(WMPlayer *)wmplayer clickedEpisodeButton:(UIButton *)episodeBtn;
 //单击WMPlayer的代理方法
 -(void)wmplayer:(WMPlayer *)wmplayer singleTaped:(UITapGestureRecognizer *)singleTap;
 //双击WMPlayer的代理方法

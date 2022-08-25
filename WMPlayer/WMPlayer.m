@@ -404,7 +404,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 
 -(void)episodeClick:(UIButton *)btn{
 
-    if (self.delegate&&[self.delegate respondsToSelector:@selector(wmplayer:clickedLockButton:)]) {
+    if (self.delegate&&[self.delegate respondsToSelector:@selector(wmplayer:clickedEpisodeButton:)]) {
         [self.delegate wmplayer:self clickedEpisodeButton:btn];
     }
 }
