@@ -849,6 +849,8 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 -(void)setIsFullscreen:(BOOL)isFullscreen{
     _isFullscreen = isFullscreen;
    self.rateBtn.hidden = self.lockBtn.hidden = !isFullscreen;
+    self.gravityBtn.hidden = !isFullscreen;
+    self.episodeBtn.hidden = !isFullscreen;
    self.fullScreenBtn.hidden = self.fullScreenBtn.selected= isFullscreen;
     if (isFullscreen) {
         self.backBtnStyle = BackBtnStylePop;
